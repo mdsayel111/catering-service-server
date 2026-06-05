@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "checkJs": false,           // Set true if you want TypeScript to check JS files
+    "module": "CommonJS",       // Node.js CommonJS modules
+    "target": "ES2020",         // Modern JS syntax
+    "moduleResolution": "Node", // Node-style module resolution
+    "allowJs": true,            // Allow compiling .js files
+    "outDir": "dist",           // Output folder if you transpile
+    "esModuleInterop": true,    // Allows default import of CommonJS modules
+    "forceConsistentCasingInFileNames": true
+  },
+  "exclude": ["node_modules"]
+}
