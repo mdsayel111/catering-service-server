@@ -49,7 +49,6 @@ user says: ${message}
     }),
   });
   const data = await response.json();
-  console.log(data?.message?.content);
   res.json({ reply: data?.message?.content || "Hello from chatbot!" });
 });
 

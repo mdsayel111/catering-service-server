@@ -71,9 +71,14 @@ const verifyOtp = async (req, res) => {
   }
 
   // CREATE USER FLOW
+  const hashedPassword = stored.data.password
+    ? await bcrypt.hash(stored.data.password, 10)
+    : undefined;
+
   const newUser = await Customer.create({
     phone,
     ...stored.data,
+    password: hashedPassword,
     isActive: true,
   });
 
