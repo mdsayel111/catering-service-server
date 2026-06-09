@@ -10,6 +10,7 @@ const {
   getAboutPageData,
   getFaqPageData,
   getOrders,
+  getPackagesPageData,
 } = require("./controller");
 const authMiddleware = require("../../middlewares/auth");
 
@@ -20,6 +21,7 @@ clientRouter.get("/settings", getSettings);
 clientRouter.get("/footer", getFooterData);
 clientRouter.get("/home-page", getHomePageData);
 clientRouter.get("/products-page", getProductsPageData);
+clientRouter.get("/packages-page", getPackagesPageData);
 clientRouter.get("/cart-page", getCartPageData);
 clientRouter.get("/blog-page", getBlogPageData);
 clientRouter.get(

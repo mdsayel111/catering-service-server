@@ -31,33 +31,14 @@ const productSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    packagePrice: {
+      type: Number,
+      required: true,
+    },
     isActive: {
       type: Boolean,
       default: true,
     },
-    // rating: {
-    //   type: Number,
-    //   default: 0,
-    // },
-    // stock: {
-    //   type: Number,
-    //   required: true,
-    // },
-    // discount: {
-    //   type: Number,
-    // },
-    // colors: [
-    //   {
-    //     type: String,
-    //     required: true,
-    //   },
-    // ],
-    // sizes: [
-    //   {
-    //     type: String,
-    //     required: true,
-    //   },
-    // ],
   },
   {
     timestamps: true,

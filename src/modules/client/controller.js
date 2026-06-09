@@ -149,6 +149,56 @@ const getOrders = async (req, res) => {
   });
 };
 
+const getPackagesPageData = async (req, res) => {
+  const categoriesWithProducts = await Product.aggregate([
+    { $unwind: "$category" },
+
+    {
+      $lookup: {
+        from: "categories",
+        localField: "category",
+        foreignField: "_id",
+        as: "categoryData",
+      },
+    },
+    { $unwind: "$categoryData" },
+    {
+      $group: {
+        _id: "$categoryData.name",
+        products: {
+          $push: {
+            _id: "$_id",
+            title: "$title",
+            description: "$description",
+            image: "$image",
+            gallery: "$gallery",
+            price: "$price",
+            packagePrice: "$packagePrice",
+            isActive: "$isActive",
+          },
+        },
+      },
+    },
+
+    // 5. format output
+    {
+      $project: {
+        _id: 0,
+        category: "$_id",
+        products: 1,
+      },
+    },
+  ]);
+
+
+  res.status(200).json({
+    success: true,
+    data: {
+      categoriesWithProducts,
+    },
+  });
+};
+
 module.exports = {
   getSettings: asyncErrorHandler(getSettings),
   getHomePageData: asyncErrorHandler(getHomePageData),
@@ -160,4 +210,5 @@ module.exports = {
   getAboutPageData: asyncErrorHandler(getAboutPageData),
   getFaqPageData: asyncErrorHandler(getFaqPageData),
   getOrders: asyncErrorHandler(getOrders),
+  getPackagesPageData: asyncErrorHandler(getPackagesPageData),
 };
