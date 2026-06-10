@@ -32,6 +32,7 @@ const getHomePageData = async (req, res) => {
     "user",
   );
   const promotions = await Promotion.find({ isActive: true });
+  const products = await Product.find({ isActive: true }).populate("category");
 
   res.status(200).json({
     success: true,
@@ -39,6 +40,7 @@ const getHomePageData = async (req, res) => {
       banners,
       categories,
       testimonials,
+      products,
       promotions,
     },
   });

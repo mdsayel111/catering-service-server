@@ -6,40 +6,66 @@ const orderSchema = new mongoose.Schema(
       name: String,
       phone: String,
     },
+
     address: {
       lat: Number,
       long: Number,
       address: String,
     },
+
+    // =========================
+    // PRODUCT IDS ONLY
+    // =========================
     products: [
       {
-        product: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "Product",
-          required: true,
-        },
-        quantity: {
-          type: Number,
-          required: true,
-          min: [1, "Quantity must be at least 1"],
-        },
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Product",
       },
     ],
-    // subtotal: {
-    //   type: Number,
-    //   required: true,
-    //   default: 0,
-    // },
-    // orderStatus: {
-    //   type: String,
-    //   enum: ["pending", "accepted", "delivered", "cancelled"],
-    //   default: "pending",
-    // },
+
+    // =========================
+    // PACKAGES (ARRAY OF PRODUCT IDS)
+    // EACH PACKAGE = [productId, productId]
+    // =========================
+    packages: [
+      [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Product",
+        },
+      ],
+    ],
+
+    // =========================
+    // OPTIONAL PRICE SNAPSHOT (recommended)
+    // =========================
+    subtotal: {
+      type: Number,
+      default: 0,
+    },
+
+    shippingCharge: {
+      type: Number,
+      default: 0,
+    },
+
+    discount: {
+      type: Number,
+      default: 0,
+    },
+
+    total: {
+      type: Number,
+      default: 0,
+    },
+
+    orderStatus: {
+      type: String,
+      enum: ["pending", "delivered", "cancelled"],
+      default: "pending",
+    },
   },
-  {
-    timestamps: true,
-  },
+  { timestamps: true }
 );
 
-const Order = mongoose.model("Order", orderSchema);
-module.exports = Order;
+module.exports = mongoose.model("Order", orderSchema);
