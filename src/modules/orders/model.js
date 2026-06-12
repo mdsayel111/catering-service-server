@@ -13,32 +13,32 @@ const orderSchema = new mongoose.Schema(
       address: String,
     },
 
-    // =========================
-    // PRODUCT IDS ONLY
-    // =========================
     products: [
       {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Product",
-      },
-    ],
-
-    // =========================
-    // PACKAGES (ARRAY OF PRODUCT IDS)
-    // EACH PACKAGE = [productId, productId]
-    // =========================
-    packages: [
-      [
-        {
+        item: {
           type: mongoose.Schema.Types.ObjectId,
           ref: "Product",
         },
+        quantity: Number,
+        price: Number,
+      }
+    ],
+
+    packages: [
+      [
+        {
+          items: [
+            {
+              type: mongoose.Schema.Types.ObjectId,
+              ref: "Product",
+            },
+          ],
+          quantity: Number,
+          price: Number,
+        }
       ],
     ],
 
-    // =========================
-    // OPTIONAL PRICE SNAPSHOT (recommended)
-    // =========================
     subtotal: {
       type: Number,
       default: 0,

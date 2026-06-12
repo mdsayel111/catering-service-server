@@ -5,9 +5,7 @@ const { sendTelegramMessage } = require("../../utils/notification");
 const Order = require("./model");
 const { isPointInZone } = require("./utils");
 
-// =========================
-// CANCEL ORDER
-// =========================
+
 const cancelOrder = async (req, res) => {
   const order = await Order.findById(req.params.id);
 
@@ -40,9 +38,7 @@ const cancelOrder = async (req, res) => {
     .json({ success: true, message: "Order cancelled" });
 };
 
-// =========================
-// CREATE ORDER (UPDATED)
-// =========================
+
 const createOrder = async (req, res) => {
   const data = req?.body;
 
@@ -96,9 +92,7 @@ const createOrder = async (req, res) => {
   });
 };
 
-// =========================
-// GET ALL ORDERS (UPDATED)
-// =========================
+
 const getOrders = async (req, res) => {
   try {
     const { paymentStatus, orderStatus } = req.query;
@@ -134,9 +128,7 @@ const getOrders = async (req, res) => {
   }
 };
 
-// =========================
-// GET SINGLE ORDER
-// =========================
+
 const getOrderById = async (req, res) => {
   const order = await Order.findById(req.params.id)
     .populate("products.product", "title price image")
@@ -155,9 +147,7 @@ const getOrderById = async (req, res) => {
   });
 };
 
-// =========================
-// UPDATE ORDER
-// =========================
+
 const updateOrder = async (req, res) => {
   const order = await Order.findByIdAndUpdate(
     req.params.id,
@@ -183,9 +173,7 @@ const updateOrder = async (req, res) => {
   });
 };
 
-// =========================
-// DELETE / CANCEL ORDER
-// =========================
+
 const deleteOrder = async (req, res) => {
   const { id } = req.params;
 
