@@ -35,7 +35,7 @@ customerRouter.put("/update-password", authMiddleware("user"), updatePassword);
 customerRouter.post("/address", authMiddleware("user"), addCustomerAddress);
 customerRouter.get("/address", authMiddleware("user"), getCustomerAddress);
 customerRouter.put(
-  "/address",
+  "/address/:id",
   authMiddleware("user"),
   (req, res, next) => {
     next();

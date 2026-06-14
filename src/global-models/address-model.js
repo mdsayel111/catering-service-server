@@ -30,12 +30,6 @@ const addressSchema = new Schema(
       enum: ["customer", "store"],
       required: true,
     },
-    isPrimary: {
-      type: Boolean,
-      required: function () {
-        return this.type === "customer";
-      },
-    },
   },
   { timestamps: true },
 );

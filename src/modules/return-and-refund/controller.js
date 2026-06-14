@@ -1,97 +1,71 @@
 const asyncErrorHandler = require("../../HOF/async-error-handler");
-const MealTime = require("./model");
+const ReturnAndRefund = require("./model");
 
-// Create MealTime
-const createMealTime = async (req, res) => {
-  const mealTime = await MealTime.create(req.body);
-  res.status(201).json({ success: true, data: mealTime });
+// Create ReturnAndRefund
+const createReturnAndRefund = async (req, res) => {
+  const returnAndRefund = await ReturnAndRefund.create(req.body);
+  res.status(201).json({ success: true, data: returnAndRefund });
 };
 
-// Get all MealTimes
-const getMealTimes = async (req, res) => {
+// Get all returnAndRefunds
+const getReturnAndRefunds = async (req, res) => {
   try {
     let { search, isActive } = req.query;
 
+    // Build query object dynamically
     const query = {};
-
     if (search) {
       query.name = { $regex: search, $options: "i" };
     }
-
     if (isActive !== undefined) {
-      query.isActive = isActive === "true";
+      query.isActive = isActive === "true"; // query params are strings
     }
 
-    const mealTimes = await MealTime.find(query).sort({ createdAt: -1 });
-
-    res.status(200).json({ success: true, data: mealTimes });
+    const returnAndRefunds = await ReturnAndRefund.find(query);
+    res.status(200).json({ success: true, data: returnAndRefunds });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
 };
+// Get single returnAndRefund
+const getReturnAndRefundById = async (req, res) => {
+  const returnAndRefund = await ReturnAndRefund.findById(req.params.id);
+  if (!returnAndRefund)
+    return res.status(404).json({ success: false, error: "ReturnAndRefund not found" });
 
-// Get single MealTime
-const getMealTimeById = async (req, res) => {
-  const mealTime = await MealTime.findById(req.params.id);
-
-  if (!mealTime) {
-    return res.status(404).json({
-      success: false,
-      error: "MealTime not found",
-    });
-  }
-
-  res.status(200).json({ success: true, data: mealTime });
+  res.status(200).json({ success: true, data: returnAndRefund });
 };
 
-// Update MealTime
-const updateMealTime = async (req, res) => {
-  const mealTime = await MealTime.findByIdAndUpdate(
-    req.params.id,
-    req.body,
-    {
-      new: true,
-      runValidators: true,
-    }
-  );
+// Update returnAndRefund
+const updateReturnAndRefund = async (req, res) => {
+  const returnAndRefund = await ReturnAndRefund.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
+  });
+  if (!returnAndRefund)
+    return res.status(404).json({ success: false, error: "ReturnAndRefund not found" });
 
-  if (!mealTime) {
-    return res.status(404).json({
-      success: false,
-      error: "MealTime not found",
-    });
-  }
-
-  res.status(200).json({ success: true, data: mealTime });
+  res.status(200).json({ success: true, data: returnAndRefund });
 };
 
 // Soft delete / toggle active
-const deleteMealTime = async (req, res) => {
+const deleteReturnAndRefund = async (req, res) => {
   const { id } = req.params;
+  const returnAndRefund = await ReturnAndRefund.findById(id);
+  if (!returnAndRefund)
+    return res.status(404).json({ success: false, error: "ReturnAndRefund not found" });
 
-  const mealTime = await MealTime.findById(id);
-
-  if (!mealTime) {
-    return res.status(404).json({
-      success: false,
-      error: "MealTime not found",
-    });
-  }
-
-  await MealTime.findByIdAndUpdate(id, {
-    isActive: !mealTime.isActive,
-  });
-
+  await ReturnAndRefund.findByIdAndUpdate(id, { isActive: !returnAndRefund.isActive });
   res.status(200).json({
     success: true,
-    message: "MealTime status updated successfully",
+    message: "ReturnAndRefund status updated successfully",
   });
 };
 
 module.exports = {
-  createMealTime: asyncErrorHandler(createMealTime),
-  getMealTimes: asyncErrorHandler(getMealTimes),
-  getMealTimeById: asyncErrorHandler(getMealTimeById),
-  updateMealTime: asyncErrorHandler(updateMealTime),
-  deleteMealTime: asyncErrorHandler(deleteMealTime),
+  createReturnAndRefund: asyncErrorHandler(createReturnAndRefund),
+  getReturnAndRefunds: asyncErrorHandler(getReturnAndRefunds),
+  getReturnAndRefundById: asyncErrorHandler(getReturnAndRefundById),
+  updateReturnAndRefund: asyncErrorHandler(updateReturnAndRefund),
+  deleteReturnAndRefund: asyncErrorHandler(deleteReturnAndRefund),
 };

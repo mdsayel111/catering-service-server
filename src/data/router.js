@@ -23,6 +23,7 @@ const addressRouter = require("../modules/address/router");
 const statsRouter = require("../modules/stats/router");
 const notificationRouter = require("../modules/notification/router");
 const feedbackRouter = require("../modules/feedback/router");
+const mealTimeRouter = require("../modules/meal-time/router");
 
 const allRouters = [
   { path: "/ai", router: aiRouter },
@@ -33,6 +34,7 @@ const allRouters = [
   { path: "/category", router: categoryRouter },
   { path: "/banner", router: bannerRouter },
   { path: "/product", router: productRouter },
+  { path: "/mealtime", router: mealTimeRouter },
   { path: "/promotion", router: promotionRouter },
   { path: "/blog", router: blogRouter },
   { path: "/logo", router: logoRouter },

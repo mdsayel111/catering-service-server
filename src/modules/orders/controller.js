@@ -1,4 +1,5 @@
 const config = require("../../config");
+const Address = require("../../global-models/address-model");
 const Notification = require("../../global-models/notification-model");
 const asyncErrorHandler = require("../../HOF/async-error-handler");
 const { sendTelegramMessage } = require("../../utils/notification");
@@ -44,6 +45,8 @@ const createOrder = async (req, res) => {
 
   const hasProducts = data?.products?.length > 0;
   const hasPackages = data?.packages?.length > 0;
+  const address = await Address.findById(data?.address);
+
 
   if (!hasProducts && !hasPackages) {
     return res.status(400).json({
@@ -53,8 +56,8 @@ const createOrder = async (req, res) => {
   }
 
   const userInZone = isPointInZone(
-    data?.address?.lat,
-    data?.address?.long
+    address?.lat,
+    address?.long
   );
 
   if (!userInZone) {

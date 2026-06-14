@@ -1,44 +1,44 @@
 const express = require("express");
 const authMiddleware = require("../../middlewares/auth");
 const {
-  createPromotion,
-  getCategories,
-  getPromotionById,
-  updatePromotion,
-  deletePromotion,
+  createMealTime,
+  getMealTimes,
+  getMealTimeById,
+  updateMealTime,
+  deleteMealTime,
 } = require("./controller");
 
-const promotionRouter = express.Router();
+const mealTimeRouter = express.Router();
 
-// Create promotion
-promotionRouter.post(
+// Create MealTime
+mealTimeRouter.post(
   "/",
   authMiddleware("admin", "super-admin"),
-  createPromotion,
+  createMealTime
 );
 
-// Get all
-promotionRouter.get("/", getCategories);
+// Get all MealTimes
+mealTimeRouter.get("/", getMealTimes);
 
-// Get one
-promotionRouter.get(
+// Get single MealTime
+mealTimeRouter.get(
   "/:id",
   authMiddleware("admin", "super-admin", "user"),
-  getPromotionById,
+  getMealTimeById
 );
 
-// Update
-promotionRouter.put(
+// Update MealTime
+mealTimeRouter.put(
   "/:id",
   authMiddleware("admin", "super-admin"),
-  updatePromotion,
+  updateMealTime
 );
 
-// Soft delete
-promotionRouter.delete(
+// Toggle active status
+mealTimeRouter.delete(
   "/:id",
   authMiddleware("admin", "super-admin"),
-  deletePromotion,
+  deleteMealTime
 );
 
-module.exports = promotionRouter;
+module.exports = mealTimeRouter;

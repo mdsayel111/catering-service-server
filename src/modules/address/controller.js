@@ -32,9 +32,8 @@ const getAddresses = async (req, res) => {
   const user = req.user;
 
   if (user.role === "user") {
-    const addresses = await Address.findOne({
+    const addresses = await Address.find({
       user: user._id,
-      isPrimary: true,
     });
     return res.status(200).json({ success: true, data: addresses });
   }

@@ -393,21 +393,8 @@ const addCustomerAddress = async (req, res) => {
 
   const address = req.body;
 
-  const existing = await Address.findOne({
-    user: user._id,
-    isPrimary: true,
-  });
-
-  if (existing) {
-    return res.status(400).json({
-      success: false,
-      message: "Address already exists",
-    });
-  }
-
   address.user = user._id;
   address.type = "customer";
-  address.isPrimary = true;
 
   await Address.create(address);
 
@@ -420,8 +407,8 @@ const addCustomerAddress = async (req, res) => {
 const updateCustomerAddress = async (req, res) => {
   const user = req.user;
 
-  const updated = await Address.findOneAndUpdate(
-    { user: user._id },
+  const updated = await Address.findByIdAndUpdate(
+    req.params.id,
     req.body,
     { new: true }
   );

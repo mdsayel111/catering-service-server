@@ -1,73 +1,109 @@
 const asyncErrorHandler = require("../../HOF/async-error-handler");
-const Promotion = require("./model");
+const MealTime = require("./model");
 
-// Create Promotion
-const createPromotion = async (req, res) => {
-  const promotion = await Promotion.create(req.body);
-  res.status(201).json({ success: true, data: promotion });
-};
+// Create MealTime
+const createMealTime = async (req, res) => {
+  const mealTime = await MealTime.create(req.body);
 
-// Get all categories
-const getCategories = async (req, res) => {
-  try {
-    const { isActive } = req.query;
-
-    // Build query object dynamically
-    const query = {};
-
-    if (isActive !== undefined) {
-      query.isActive = isActive === "true"; // query params are strings
-    }
-
-    const categories = await Promotion.find(query);
-    res.status(200).json({ success: true, data: categories });
-  } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
-  }
-};
-
-// Get single promotion
-const getPromotionById = async (req, res) => {
-  const promotion = await Promotion.findById(req.params.id);
-  if (!promotion)
-    return res
-      .status(404)
-      .json({ success: false, error: "Promotion not found" });
-  res.status(200).json({ success: true, data: promotion });
-};
-
-// Update promotion
-const updatePromotion = async (req, res) => {
-
-  const promotion = await Promotion.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true,
+  res.status(201).json({
+    success: true,
+    data: mealTime,
   });
-  if (!promotion)
-    return res
-      .status(404)
-      .json({ success: false, error: "Promotion not found" });
-  res.status(200).json({ success: true, data: promotion });
 };
 
-// Soft delete / toggle active
-const deletePromotion = async (req, res) => {
-  const { id } = req.params;
-  const promotion = await Promotion.findById(id);
-  if (!promotion)
-    return res
-      .status(404)
-      .json({ success: false, error: "Promotion not found" });
-  await Promotion.findByIdAndUpdate(id, { isActive: !promotion.isActive });
-  res
-    .status(200)
-    .json({ success: true, message: "Promotion status updated successfully" });
+// Get all MealTimes
+const getMealTimes = async (req, res) => {
+  const { search, isActive } = req.query;
+
+  const query = {};
+
+  if (search) {
+    query.name = { $regex: search, $options: "i" };
+  }
+
+  if (isActive !== undefined) {
+    query.isActive = isActive === "true";
+  }
+
+  const mealTimes = await MealTime.find(query).sort({
+    "orderTime.hour": 1,
+    "orderTime.minute": 1,
+  });
+
+  res.status(200).json({
+    success: true,
+    data: mealTimes,
+  });
+};
+
+// Get single MealTime
+const getMealTimeById = async (req, res) => {
+  const mealTime = await MealTime.findById(req.params.id);
+
+  if (!mealTime) {
+    return res.status(404).json({
+      success: false,
+      error: "MealTime not found",
+    });
+  }
+
+  res.status(200).json({
+    success: true,
+    data: mealTime,
+  });
+};
+
+// Update MealTime
+const updateMealTime = async (req, res) => {
+  const mealTime = await MealTime.findByIdAndUpdate(
+    req.params.id,
+    req.body,
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
+
+  if (!mealTime) {
+    return res.status(404).json({
+      success: false,
+      error: "MealTime not found",
+    });
+  }
+
+  res.status(200).json({
+    success: true,
+    data: mealTime,
+  });
+};
+
+// Toggle active status
+const deleteMealTime = async (req, res) => {
+  const { id } = req.body;
+
+  const mealTime = await MealTime.findById(id);
+
+  if (!mealTime) {
+    return res.status(404).json({
+      success: false,
+      error: "MealTime not found",
+    });
+  }
+
+  await MealTime.findByIdAndUpdate(id, {
+    isActive: !mealTime.isActive,
+  });
+
+  res.status(200).json({
+    success: true,
+    message: "MealTime status updated successfully",
+  });
 };
 
 module.exports = {
-  createPromotion: asyncErrorHandler(createPromotion),
-  getCategories: asyncErrorHandler(getCategories),
-  getPromotionById: asyncErrorHandler(getPromotionById),
-  updatePromotion: asyncErrorHandler(updatePromotion),
-  deletePromotion: asyncErrorHandler(deletePromotion),
+  createMealTime: asyncErrorHandler(createMealTime),
+  getMealTimes: asyncErrorHandler(getMealTimes),
+  getMealTimeById: asyncErrorHandler(getMealTimeById),
+  updateMealTime: asyncErrorHandler(updateMealTime),
+  deleteMealTime: asyncErrorHandler(deleteMealTime),
 };
