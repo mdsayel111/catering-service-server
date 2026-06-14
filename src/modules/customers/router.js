@@ -17,6 +17,7 @@ const {
   updateCustomerAddress,
   updatePassword,
   resetPassword,
+  deleteCustomerAddress,
 } = require("./controller");
 
 const customerRouter = express.Router();
@@ -37,10 +38,13 @@ customerRouter.get("/address", authMiddleware("user"), getCustomerAddress);
 customerRouter.put(
   "/address/:id",
   authMiddleware("user"),
-  (req, res, next) => {
-    next();
-  },
   updateCustomerAddress,
+);
+
+customerRouter.delete(
+  "/address/:id",
+  authMiddleware("user"),
+  deleteCustomerAddress,
 );
 
 // customer routes

@@ -419,6 +419,21 @@ const updateCustomerAddress = async (req, res) => {
   });
 };
 
+const deleteCustomerAddress = async (req, res) => {
+  const user = req.user;
+
+  const address = await Address.findOne({
+    user: user._id,
+  });
+
+  await Address.findByIdAndDelete(req.params.id);
+
+  res.json({
+    success: true,
+    message: "Address deleted",
+  });
+};
+
 const getCustomerAddress = async (req, res) => {
   const user = req.user;
 
@@ -456,4 +471,5 @@ module.exports = {
   addCustomerAddress: asyncErrorHandler(addCustomerAddress),
   updateCustomerAddress: asyncErrorHandler(updateCustomerAddress),
   getCustomerAddress: asyncErrorHandler(getCustomerAddress),
+  deleteCustomerAddress: asyncErrorHandler(deleteCustomerAddress),
 };
